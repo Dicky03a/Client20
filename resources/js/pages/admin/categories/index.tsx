@@ -4,8 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, router } from '@inertiajs/react';
-import { Pencil, Plus, Trash2, Tag } from 'lucide-react';
+import { Head, useForm, router, Link } from '@inertiajs/react';
+import { Pencil, Plus, Trash2, Tag, Eye } from 'lucide-react';
 import { useState, FormEventHandler } from 'react';
 
 interface Category {
@@ -148,6 +148,12 @@ export default function CategoriesIndex({ categories }: { categories: Category[]
                                             </td>
                                             <td className="p-4 text-right align-middle">
                                                 <div className="flex justify-end gap-2">
+                                                    <Link href={route('admin.categories.show', category.id)}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20">
+                                                            <Eye className="h-4 w-4" />
+                                                            <span className="sr-only">Lihat Data</span>
+                                                        </Button>
+                                                    </Link>
                                                     <Button variant="ghost" size="icon" onClick={() => openEditDialog(category)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>

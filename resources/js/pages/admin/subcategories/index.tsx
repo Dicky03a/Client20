@@ -5,8 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
-import { Network, Pencil, Plus, Tag, Trash2 } from 'lucide-react';
+import { Head, useForm, Link } from '@inertiajs/react';
+import { Network, Pencil, Plus, Tag, Trash2, Eye } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 interface Category {
@@ -157,6 +157,12 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                                             </td>
                                             <td className="p-4 text-right align-middle">
                                                 <div className="flex justify-end gap-2">
+                                                    <Link href={route('admin.subcategories.show', sub.id)}>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20">
+                                                            <Eye className="h-4 w-4" />
+                                                            <span className="sr-only">Lihat Data</span>
+                                                        </Button>
+                                                    </Link>
                                                     <Button variant="ghost" size="icon" onClick={() => openEditDialog(sub)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>

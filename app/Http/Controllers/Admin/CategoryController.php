@@ -30,6 +30,18 @@ class CategoryController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Category $category)
+    {
+        $category->load(['subcategories.submissions.user', 'subcategories.submissions.userFile']);
+
+        return Inertia::render('admin/categories/show', [
+            'category' => $category,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(CategoryRequest $request)

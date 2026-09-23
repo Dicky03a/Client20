@@ -16,8 +16,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'edit', 'show']);
-    Route::resource('subcategories', \App\Http\Controllers\Admin\SubcategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'edit']);
+    Route::resource('subcategories', \App\Http\Controllers\Admin\SubcategoryController::class)->except(['create', 'edit']);
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->except(['create', 'edit', 'show']);
     Route::get('users/{user}/submissions', [\App\Http\Controllers\Admin\UserSubmissionController::class, 'index'])->name('users.submissions');
     Route::get('files/download/{file}', [\App\Http\Controllers\Admin\UserSubmissionController::class, 'download'])->name('files.download');

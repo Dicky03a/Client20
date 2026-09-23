@@ -35,6 +35,18 @@ class SubcategoryController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Subcategory $subcategory)
+    {
+        $subcategory->load(['submissions.user', 'submissions.userFile', 'category']);
+
+        return Inertia::render('admin/subcategories/show', [
+            'subcategory' => $subcategory,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(SubcategoryRequest $request)
