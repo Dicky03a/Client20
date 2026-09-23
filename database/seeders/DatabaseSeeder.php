@@ -20,13 +20,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $admin = User::firstOrCreate(
-            ['email' => 'test@example.com'],
+            ['email' => 'admin@gmail.com'],
             ['name' => 'Admin User', 'password' => bcrypt('password')]
         );
         $admin->assignRole('admin');
 
         $user = User::firstOrCreate(
-            ['email' => 'user@example.com'],
+            ['email' => 'user@gmail.com'],
             ['name' => 'Regular User', 'password' => bcrypt('password')]
         );
         $user->assignRole('user');

@@ -17,6 +17,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('dashboard', function () {
         return Inertia::render('admin/dashboard'); 
     })->name('dashboard');
+
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'edit', 'show']);
 });
 
 require __DIR__.'/settings.php';
