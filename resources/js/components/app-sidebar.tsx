@@ -3,20 +3,38 @@ import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Tag } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { BookOpen, Folder, LayoutGrid, Network, Tag, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const userNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         url: '/dashboard',
+        icon: LayoutGrid,
+    },
+];
+
+const adminNavItems: NavItem[] = [
+    {
+        title: 'Dashboard Admin',
+        url: '/admin/dashboard',
         icon: LayoutGrid,
     },
     {
         title: 'Kategori',
         url: '/admin/categories',
         icon: Tag,
+    },
+    {
+        title: 'Subkategori',
+        url: '/admin/subcategories',
+        icon: Network,
+    },
+    {
+        title: 'Pengguna',
+        url: '/admin/users',
+        icon: Users,
     },
 ];
 
@@ -34,13 +52,19 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const page = usePage();
+    const isAdminRoute = page.url.startsWith('/admin');
+    
+    // Choose which nav items to display based on the route prefix
+    const activeNavItems = isAdminRoute ? adminNavItems : userNavItems;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={isAdminRoute ? "/admin/dashboard" : "/dashboard"} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -49,7 +73,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={activeNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
