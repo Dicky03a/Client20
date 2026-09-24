@@ -6,8 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, Link } from '@inertiajs/react';
-import { Pencil, Plus, Trash2, UserCircle, Users, ClipboardList } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { Pencil, Plus, Trash2, UserCircle, Users, ClipboardList, Search } from 'lucide-react';
+import { FormEventHandler, useState, useMemo } from 'react';
 
 interface Role {
     name: string;
@@ -30,6 +30,14 @@ export default function UsersIndex({ users, roles }: { users: User[], roles: Rol
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredUsers = useMemo(() => {
+        return users.filter(user => 
+            user.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            user.email.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [users, searchQuery]);
 
     const { data, setData, post, put, delete: destroy, reset, errors, processing } = useForm({
         name: '',
@@ -101,13 +109,25 @@ export default function UsersIndex({ users, roles }: { users: User[], roles: Rol
                             Kelola data dan hak akses pengguna sistem.
                         </p>
                     </div>
-                    <Button 
-                        onClick={openCreateDialog}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-md transition-all duration-200"
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Tambah Pengguna
-                    </Button>
+                    <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
+                        <div className="relative w-full sm:w-64">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                type="text"
+                                placeholder="Cari pengguna..."
+                                className="pl-9 w-full bg-background"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                        <Button 
+                            onClick={openCreateDialog}
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-md transition-all duration-200 w-full sm:w-auto"
+                        >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambah Pengguna
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden flex-1">
@@ -123,7 +143,7 @@ export default function UsersIndex({ users, roles }: { users: User[], roles: Rol
                                 </tr>
                             </thead>
                             <tbody className="[&_tr:last-child]:border-0">
-                                {users.length === 0 ? (
+                                {filteredUsers.length === 0 ? (
                                     <tr>
                                         <td colSpan={5} className="p-4 text-center text-muted-foreground h-32">
                                             <div className="flex flex-col items-center justify-center gap-2">
@@ -133,7 +153,7 @@ export default function UsersIndex({ users, roles }: { users: User[], roles: Rol
                                         </td>
                                     </tr>
                                 ) : (
-                                    users.map((user) => (
+                                    filteredUsers.map((user) => (
                                         <tr 
                                             key={user.id}
                                             className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted group"

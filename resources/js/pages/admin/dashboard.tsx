@@ -73,28 +73,6 @@ export default function Dashboard({ stats, recent_submissions }: { stats: Dashbo
                             <p className="text-xs text-muted-foreground mt-1">Kategori bawaan</p>
                         </CardContent>
                     </Card>
-
-                    <Card className="shadow-sm border border-neutral-200 dark:border-neutral-800">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Pengajuan</CardTitle>
-                            <FileText className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold">{stats.total_submissions}</div>
-                            <p className="text-xs text-muted-foreground mt-1">Data submission masuk</p>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="shadow-sm border border-neutral-200 dark:border-neutral-800">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Berkas Pengguna</CardTitle>
-                            <UploadCloud className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold">{stats.total_user_files}</div>
-                            <p className="text-xs text-muted-foreground mt-1">File yang diunggah</p>
-                        </CardContent>
-                    </Card>
                 </div>
 
                 <div className="mt-4">

@@ -9,11 +9,6 @@ import AppLogo from './app-logo';
 
 const userNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        url: '/dashboard',
-        icon: LayoutGrid,
-    },
-    {
         title: 'Kategori Formulir',
         url: '/user/submissions',
         icon: Tag,
@@ -56,7 +51,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={isAdminRoute ? "/admin/dashboard" : "/dashboard"} prefetch>
+                            <Link href={isAdminRoute ? "/admin/dashboard" : "/user/submissions"} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
