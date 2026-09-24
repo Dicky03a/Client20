@@ -1,13 +1,9 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { FileText, Download, ArrowLeft, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-
-import { useState } from 'react';
+import { FileText, ArrowLeft } from 'lucide-react';
 
 export default function SubcategoryShow({ subcategory }: { subcategory: any }) {
-    const [previewData, setPreviewData] = useState<{url: string, name: string} | null>(null);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin/dashboard' },
@@ -41,69 +37,59 @@ export default function SubcategoryShow({ subcategory }: { subcategory: any }) {
                         <h3 className="text-xl font-bold">{subcategory.name}</h3>
                         <p className="text-sm text-muted-foreground mt-1">{subcategory.description}</p>
                     </div>
-                    <div className="divide-y">
+                    <div className="border-t border-neutral-100 dark:border-neutral-800">
                         {subcategory.submissions && subcategory.submissions.length > 0 ? (
-                            subcategory.submissions.map((submission: any) => (
-                                <div key={submission.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                    <div className="flex items-start sm:items-center gap-4">
-                                        <div className="mt-1 sm:mt-0 flex-shrink-0">
-                                            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                                                <User className="w-5 h-5" />
+                            <div className="p-4 grid gap-4 xl:gap-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                                {subcategory.submissions.map((submission: any) => {
+                                    const userFile = submission.user_file;
+                                    const isImage = userFile?.mime_type?.startsWith('image/');
+                                    const fileName = userFile?.original_name || 'Tanpa Nama File';
+                                    
+                                    return (
+                                        <div key={submission.id} className="group relative flex flex-col bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:bg-neutral-50 dark:hover:bg-neutral-800/80 hover:shadow-md transition-all duration-200">
+                                            <div className="h-32 sm:h-40 bg-neutral-100 dark:bg-neutral-950 flex items-center justify-center border-b border-neutral-100 dark:border-neutral-800 relative z-10 w-full overflow-hidden">
+                                                {userFile ? (
+                                                    <a href={`/admin/files/preview/${userFile.id}`} target="_blank" rel="noreferrer" className="w-full h-full block">
+                                                        {isImage ? (
+                                                            <img src={`/admin/files/preview/${userFile.id}`} alt={fileName} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center relative overflow-hidden bg-white dark:bg-neutral-800 group-hover:bg-neutral-50 dark:group-hover:bg-neutral-900 transition-colors">
+                                                                <FileText className="w-12 h-12 text-blue-500" />
+                                                            </div>
+                                                        )}
+                                                    </a>
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center relative bg-white dark:bg-neutral-800">
+                                                        <FileText className="w-12 h-12 text-neutral-300" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="p-3 bg-white dark:bg-neutral-900 flex flex-col min-h-[4.5rem]">
+                                                <div className="flex items-start justify-between gap-2">
+                                                    <div className="flex-1 min-w-0 flex flex-col leading-tight">
+                                                        <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200 truncate" title={submission.user?.name}>
+                                                            {submission.user?.name}
+                                                        </p>
+                                                        {userFile && (
+                                                            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5" title={fileName}>
+                                                                {fileName}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{submission.user?.name}</h4>
-                                            <p className="text-xs text-neutral-500">{submission.user?.email}</p>
-                                            {submission.user_file && (
-                                                <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center">
-                                                    <FileText className="w-3 h-3 mr-1" />
-                                                    {submission.user_file.original_name}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="sm:ml-4 sm:flex-shrink-0 flex items-center justify-end">
-                                        {submission.user_file && (
-                                            <div className="flex items-center">
-                                                <Button variant="outline" size="sm" onClick={() => setPreviewData({url: `/admin/files/preview/${submission.user_file.id}`, name: submission.user_file.original_name})} className="mr-2 flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                                                    <FileText className="w-4 h-4" />
-                                                    Preview
-                                                </Button>
-                                                <a href={`/admin/files/download/${submission.user_file.id}`} target="_blank" rel="noopener noreferrer">
-                                                    <Button variant="outline" size="sm" className="flex items-center gap-2 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20">
-                                                        <Download className="w-4 h-4" />
-                                                        Download
-                                                    </Button>
-                                                </a>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))
+                                    );
+                                })}
+                            </div>
                         ) : (
-                            <div className="p-8 text-center text-muted-foreground">
+                            <div className="p-8 text-sm text-muted-foreground text-center bg-neutral-50 dark:bg-neutral-900 mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800 max-w-2xl mx-auto mb-4">
                                 Belum ada submisi untuk subkategori ini.
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-            
-            {previewData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
-                    <div className="flex flex-col w-full max-w-5xl h-[80vh] md:h-[90vh] bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-                        <div className="p-3 md:p-4 border-b border-neutral-200 dark:border-neutral-700 flex justify-between items-center bg-neutral-50 dark:bg-neutral-900">
-                            <h3 className="font-medium text-neutral-900 dark:text-neutral-100 text-sm md:text-base truncate mr-3">{previewData.name}</h3>
-                            <Button variant="outline" size="sm" onClick={() => setPreviewData(null)} className="flex-shrink-0 h-8 text-xs md:text-sm md:h-9">
-                                Tutup
-                            </Button>
-                        </div>
-                        <div className="flex-1 p-0 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                            <iframe src={previewData.url} className="w-full h-full border-0" title={previewData.name} />
-                        </div>
-                    </div>
-                </div>
-            )}
         </AppLayout>
     );
 }
