@@ -5,8 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, Link } from '@inertiajs/react';
-import { Network, Pencil, Plus, Tag, Trash2, Eye } from 'lucide-react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Eye, Network, Pencil, Plus, Trash2 } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 interface Category {
@@ -29,12 +29,21 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Subkategori', href: '/admin/subcategories' },
 ];
 
-export default function SubcategoriesIndex({ subcategories, categories }: { subcategories: Subcategory[], categories: Category[] }) {
+export default function SubcategoriesIndex({ subcategories, categories }: { subcategories: Subcategory[]; categories: Category[] }) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
 
-    const { data, setData, post, put, delete: destroy, reset, errors, processing } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        put,
+        delete: destroy,
+        reset,
+        errors,
+        processing,
+    } = useForm({
         category_id: '',
         name: '',
         description: '',
@@ -92,20 +101,18 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Subkategori" />
 
-            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+            <div className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
                 {/* Header Section */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-500 dark:from-neutral-100 dark:to-neutral-400 bg-clip-text text-transparent">
+                        <h1 className="bg-gradient-to-r from-neutral-900 to-neutral-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent dark:from-neutral-100 dark:to-neutral-400">
                             Manajemen Subkategori
                         </h1>
-                        <p className="text-muted-foreground mt-1 text-sm">
-                            Kelola subkategori turunan dari kategori utama.
-                        </p>
+                        <p className="text-muted-foreground mt-1 text-sm">Kelola subkategori turunan dari kategori utama.</p>
                     </div>
-                    <Button 
+                    <Button
                         onClick={openCreateDialog}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-md transition-all duration-200"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm transition-all duration-200 hover:shadow-md"
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         Tambah Subkategori
@@ -113,22 +120,22 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                 </div>
 
                 {/* Table Section */}
-                <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden flex-1">
+                <div className="bg-card text-card-foreground flex-1 overflow-hidden rounded-xl border shadow-sm">
                     <div className="relative w-full overflow-auto">
                         <table className="w-full caption-bottom text-sm">
-                            <thead className="[&_tr]:border-b bg-muted/50">
-                                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">ID</th>
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Kategori Induk</th>
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Subkategori</th>
-                                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Deskripsi</th>
-                                    <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Aksi</th>
+                            <thead className="bg-muted/50 [&_tr]:border-b">
+                                <tr className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
+                                    <th className="text-muted-foreground h-12 px-4 text-left align-middle font-medium">ID</th>
+                                    <th className="text-muted-foreground h-12 px-4 text-left align-middle font-medium">Kategori Induk</th>
+                                    <th className="text-muted-foreground h-12 px-4 text-left align-middle font-medium">Subkategori</th>
+                                    <th className="text-muted-foreground h-12 px-4 text-left align-middle font-medium">Deskripsi</th>
+                                    <th className="text-muted-foreground h-12 px-4 text-right align-middle font-medium">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody className="[&_tr:last-child]:border-0">
                                 {subcategories.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="p-4 text-center text-muted-foreground h-32">
+                                        <td colSpan={5} className="text-muted-foreground h-32 p-4 text-center">
                                             <div className="flex flex-col items-center justify-center gap-2">
                                                 <Network className="h-8 w-8 opacity-20" />
                                                 <span>Tidak ada subkategori yang ditemukan.</span>
@@ -137,13 +144,13 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                                     </tr>
                                 ) : (
                                     subcategories.map((sub) => (
-                                        <tr 
+                                        <tr
                                             key={sub.id}
-                                            className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted group"
+                                            className="hover:bg-muted/50 data-[state=selected]:bg-muted group border-b transition-colors"
                                         >
                                             <td className="p-4 align-middle font-medium">{sub.id}</td>
                                             <td className="p-4 align-middle">
-                                                <div className="flex items-center gap-2 text-muted-foreground">
+                                                <div className="text-muted-foreground flex items-center gap-2">
                                                     {sub.category?.name || 'Tidak diketahui'}
                                                 </div>
                                             </td>
@@ -152,22 +159,34 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                                                     <span className="font-semibold">{sub.name}</span>
                                                 </div>
                                             </td>
-                                            <td className="p-4 align-middle text-muted-foreground max-w-xs truncate">
-                                                {sub.description || '-'}
-                                            </td>
+                                            <td className="text-muted-foreground max-w-xs truncate p-4 align-middle">{sub.description || '-'}</td>
                                             <td className="p-4 text-right align-middle">
                                                 <div className="flex justify-end gap-2">
                                                     <Link href={route('admin.subcategories.show', sub.id)}>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900/20">
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            className="h-8 w-8 text-green-600 hover:bg-green-50 hover:text-green-700 dark:hover:bg-green-900/20"
+                                                        >
                                                             <Eye className="h-4 w-4" />
                                                             <span className="sr-only">Lihat Data</span>
                                                         </Button>
                                                     </Link>
-                                                    <Button variant="ghost" size="icon" onClick={() => openEditDialog(sub)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => openEditDialog(sub)}
+                                                        className="h-8 w-8 text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20"
+                                                    >
                                                         <Pencil className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>
                                                     </Button>
-                                                    <Button variant="ghost" size="icon" onClick={() => openDeleteDialog(sub)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => openDeleteDialog(sub)}
+                                                        className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20"
+                                                    >
                                                         <Trash2 className="h-4 w-4" />
                                                         <span className="sr-only">Hapus</span>
                                                     </Button>
@@ -184,26 +203,25 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
 
             {/* Create / Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogContent className="sm:max-w-[425px] overflow-visible p-0 border-0 shadow-2xl">
-                    <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background p-6 pb-2 border-b">
+                <DialogContent className="overflow-visible border-0 p-0 shadow-2xl sm:max-w-[425px]">
+                    <div className="from-primary/10 via-primary/5 to-background border-b bg-gradient-to-r p-6 pb-2">
                         <DialogHeader>
-                            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <DialogTitle className="flex items-center gap-2 text-xl font-bold">
                                 {selectedSubcategory ? 'Edit Subkategori' : 'Tambah Subkategori'}
                             </DialogTitle>
                             <DialogDescription>
-                                {selectedSubcategory 
-                                    ? 'Perbarui detail subkategori yang sudah ada di bawah ini.' 
+                                {selectedSubcategory
+                                    ? 'Perbarui detail subkategori yang sudah ada di bawah ini.'
                                     : 'Isi form di bawah ini untuk menambahkan subkategori baru.'}
                             </DialogDescription>
                         </DialogHeader>
                     </div>
-                    <form onSubmit={submitForm} className="p-6 pt-4 space-y-4">
+                    <form onSubmit={submitForm} className="space-y-4 p-6 pt-4">
                         <div className="space-y-2">
-                            <Label htmlFor="category_id" className="text-sm font-semibold">Kategori Induk</Label>
-                            <Select 
-                                value={data.category_id} 
-                                onValueChange={(val) => setData('category_id', val)}
-                            >
+                            <Label htmlFor="category_id" className="text-sm font-semibold">
+                                Kategori Induk
+                            </Label>
+                            <Select value={data.category_id} onValueChange={(val) => setData('category_id', val)}>
                                 <SelectTrigger className={errors.category_id ? 'border-red-500' : ''}>
                                     <SelectValue placeholder="-- Pilih Kategori Utama --" />
                                 </SelectTrigger>
@@ -215,10 +233,12 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.category_id && <p className="text-sm text-red-500 font-medium">{errors.category_id}</p>}
+                            {errors.category_id && <p className="text-sm font-medium text-red-500">{errors.category_id}</p>}
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-sm font-semibold">Nama Subkategori</Label>
+                            <Label htmlFor="name" className="text-sm font-semibold">
+                                Nama Subkategori
+                            </Label>
                             <Input
                                 id="name"
                                 value={data.name}
@@ -226,25 +246,22 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
                                 className={errors.name ? 'border-red-500' : ''}
                                 placeholder="Mis. Pertemuan Rutin"
                             />
-                            {errors.name && <p className="text-sm text-red-500 font-medium">{errors.name}</p>}
+                            {errors.name && <p className="text-sm font-medium text-red-500">{errors.name}</p>}
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="description" className="text-sm font-semibold">Deskripsi</Label>
+                            <Label htmlFor="description" className="text-sm font-semibold">
+                                Deskripsi
+                            </Label>
                             <Input
                                 id="description"
                                 value={data.description}
                                 onChange={(e) => setData('description', e.target.value)}
                                 placeholder="Deskripsi opsional..."
                             />
-                            {errors.description && <p className="text-sm text-red-500 font-medium">{errors.description}</p>}
+                            {errors.description && <p className="text-sm font-medium text-red-500">{errors.description}</p>}
                         </div>
-                        <DialogFooter className="pt-4 mt-2 border-t">
-                            <Button 
-                                type="button" 
-                                variant="outline" 
-                                onClick={() => setIsDialogOpen(false)}
-                                disabled={processing}
-                            >
+                        <DialogFooter className="mt-2 border-t pt-4">
+                            <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} disabled={processing}>
                                 Batal
                             </Button>
                             <Button type="submit" disabled={processing} className="shadow-sm">
@@ -259,13 +276,13 @@ export default function SubcategoriesIndex({ subcategories, categories }: { subc
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle className="text-red-600 flex items-center gap-2">
+                        <DialogTitle className="flex items-center gap-2 text-red-600">
                             <Trash2 className="h-5 w-5" />
                             Konfirmasi Hapus
                         </DialogTitle>
                         <DialogDescription className="py-4 text-base">
-                            Apakah Anda yakin ingin menghapus subkategori <strong>"{selectedSubcategory?.name}"</strong>? 
-                            Tindakan ini tidak dapat dibatalkan.
+                            Apakah Anda yakin ingin menghapus subkategori <strong>"{selectedSubcategory?.name}"</strong>? Tindakan ini tidak dapat
+                            dibatalkan.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

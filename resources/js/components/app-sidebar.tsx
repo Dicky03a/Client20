@@ -1,10 +1,9 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Network, Tag, Users } from 'lucide-react';
+import { LayoutGrid, Network, Tag, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const userNavItems: NavItem[] = [
@@ -41,7 +40,7 @@ const adminNavItems: NavItem[] = [
 export function AppSidebar() {
     const page = usePage();
     const isAdminRoute = page.url.startsWith('/admin');
-    
+
     // Choose which nav items to display based on the route prefix
     const activeNavItems = isAdminRoute ? adminNavItems : userNavItems;
 
@@ -51,7 +50,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={isAdminRoute ? "/admin/dashboard" : "/user/submissions"} prefetch>
+                            <Link href={isAdminRoute ? '/admin/dashboard' : '/user/submissions'} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

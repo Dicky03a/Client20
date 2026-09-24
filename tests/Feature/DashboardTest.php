@@ -5,11 +5,15 @@ use App\Models\User;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('guests are redirected to the login page', function () {
-    $this->get('/dashboard')->assertRedirect('/login');
+    $this->get('/user/submissions')->assertRedirect('/login');
 });
 
-test('authenticated users can visit the dashboard', function () {
-    $this->actingAs($user = User::factory()->create());
+test('authenticated users can visit their submissions', function () {
+    \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'user']);
+    $user = User::factory()->create();
+    $user->assignRole('user');
+    
+    $this->actingAs($user);
 
-    $this->get('/dashboard')->assertOk();
+    $this->get('/user/submissions')->assertOk();
 });

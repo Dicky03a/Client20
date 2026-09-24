@@ -31,9 +31,7 @@ interface Category {
 
 export default function Welcome({ categories }: { categories: Category[] }) {
     const { auth } = usePage<SharedData>().props;
-    const [expandedCategory, setExpandedCategory] = useState<number | null>(
-        categories && categories.length > 0 ? categories[0].id : null
-    );
+    const [expandedCategory, setExpandedCategory] = useState<number | null>(categories && categories.length > 0 ? categories[0].id : null);
 
     return (
         <>
@@ -49,11 +47,7 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                             <div>
                                 {auth.user ? (
                                     <Link
-                                        href={
-                                            (auth.user as any)?.role === 'admin'
-                                                ? route('admin.dashboard')
-                                                : route('user.submissions.index')
-                                        }
+                                        href={(auth.user as { role?: string })?.role === 'admin' ? route('admin.dashboard') : route('user.submissions.index')}
                                         className="text-sm font-medium transition-colors hover:text-black dark:hover:text-white"
                                     >
                                         Dashboard
@@ -68,7 +62,7 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                                         </Link>
                                         <Link
                                             href={route('register')}
-                                            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 shadow-sm"
+                                            className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
                                         >
                                             Register
                                         </Link>
@@ -83,30 +77,26 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                 <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
                     {/* Content Section */}
                     {categories && categories.length > 0 ? (
-                        <div className="px-2 pb-16 flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 px-2 pb-16">
                             {categories.map((category) => (
                                 <div
                                     key={category.id}
-                                    className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all dark:border-neutral-800 dark:bg-[#111110] hover:shadow-md"
+                                    className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-neutral-800 dark:bg-[#111110]"
                                 >
                                     {/* Category Header */}
                                     <button
-                                        onClick={() =>
-                                            setExpandedCategory(expandedCategory === category.id ? null : category.id)
-                                        }
+                                        onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
                                         className="flex w-full cursor-pointer items-center justify-between px-6 py-5 text-left focus:outline-none"
                                     >
                                         <div>
-                                            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
-                                                {category.name}
-                                            </h2>
+                                            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">{category.name}</h2>
                                             {category.description && (
-                                                <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400 font-medium">
+                                                <p className="mt-1 text-sm font-medium text-neutral-500 dark:text-neutral-400">
                                                     {category.description}
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-900 transition-colors">
+                                        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-100 transition-colors dark:bg-neutral-900">
                                             <span className="text-xl font-light text-neutral-500">
                                                 {expandedCategory === category.id ? '−' : '+'}
                                             </span>
@@ -115,7 +105,7 @@ export default function Welcome({ categories }: { categories: Category[] }) {
 
                                     {/* Subcategories (Expanded State) */}
                                     {expandedCategory === category.id && (
-                                        <div className="border-t border-neutral-100 px-6 py-6 dark:border-neutral-800 bg-neutral-50/50 dark:bg-transparent">
+                                        <div className="border-t border-neutral-100 bg-neutral-50/50 px-6 py-6 dark:border-neutral-800 dark:bg-transparent">
                                             {category.subcategories && category.subcategories.length > 0 ? (
                                                 <div className="flex flex-col gap-8">
                                                     {category.subcategories.map((subcategory) => (
@@ -137,33 +127,48 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                                                                     {subcategory.submissions.map((submission) => (
                                                                         <div
                                                                             key={submission.id}
-                                                                            className="flex flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm transition-all hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-neutral-700 hover:shadow-md"
+                                                                            className="flex flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-3 shadow-sm transition-all hover:border-neutral-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-neutral-700"
                                                                         >
                                                                             {submission.user_file.mime_type.startsWith('image/') ? (
-                                                                                <div className="aspect-video w-full overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
-                                                                                    <img 
-                                                                                        src={`/storage/${submission.user_file.path}`} 
+                                                                                <div className="aspect-video w-full overflow-hidden rounded-xl border border-neutral-100 bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-900">
+                                                                                    <img
+                                                                                        src={`/storage/${submission.user_file.path}`}
                                                                                         alt={submission.user_file.original_name}
                                                                                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                                                                                         loading="lazy"
                                                                                     />
                                                                                 </div>
                                                                             ) : (
-                                                                                <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800">
+                                                                                <div className="flex aspect-video w-full items-center justify-center rounded-xl border border-neutral-100 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/50">
                                                                                     <div className="flex flex-col items-center gap-2 text-neutral-400">
-                                                                                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                                        <svg
+                                                                                            className="h-8 w-8"
+                                                                                            fill="none"
+                                                                                            viewBox="0 0 24 24"
+                                                                                            stroke="currentColor"
+                                                                                        >
+                                                                                            <path
+                                                                                                strokeLinecap="round"
+                                                                                                strokeLinejoin="round"
+                                                                                                strokeWidth={1.5}
+                                                                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                                                            />
                                                                                         </svg>
-                                                                                        <span className="text-xs font-medium uppercase tracking-wider">{submission.user_file.mime_type.split('/').pop()}</span>
+                                                                                        <span className="text-xs font-medium tracking-wider uppercase">
+                                                                                            {submission.user_file.mime_type.split('/').pop()}
+                                                                                        </span>
                                                                                     </div>
                                                                                 </div>
                                                                             )}
-                                                                            
+
                                                                             <div className="px-1 pb-1">
-                                                                                <p className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-100" title={submission.user_file.original_name}>
+                                                                                <p
+                                                                                    className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-100"
+                                                                                    title={submission.user_file.original_name}
+                                                                                >
                                                                                     {submission.user_file.original_name}
                                                                                 </p>
-                                                                                <p className="mt-1 text-xs text-neutral-500 uppercase tracking-wider">
+                                                                                <p className="mt-1 text-xs tracking-wider text-neutral-500 uppercase">
                                                                                     {(submission.user_file.size / 1024).toFixed(1)} KB
                                                                                 </p>
                                                                             </div>
@@ -179,9 +184,7 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <p className="text-sm text-neutral-400 italic">
-                                                    No subcategories available.
-                                                </p>
+                                                <p className="text-sm text-neutral-400 italic">No subcategories available.</p>
                                             )}
                                         </div>
                                     )}
@@ -190,7 +193,7 @@ export default function Welcome({ categories }: { categories: Category[] }) {
                         </div>
                     ) : (
                         <div className="flex items-center justify-center rounded-2xl border border-neutral-200 bg-white p-12 dark:border-neutral-800 dark:bg-neutral-900">
-                            <p className="text-neutral-500 text-lg">No categories available at the moment.</p>
+                            <p className="text-lg text-neutral-500">No categories available at the moment.</p>
                         </div>
                     )}
                 </main>

@@ -1,13 +1,14 @@
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { CheckCircle, Circle, FileText, Download, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowLeft, CheckCircle, Circle, Download, FileText } from 'lucide-react';
 
 import { useState } from 'react';
 
-export default function UserSubmissions({ user, categories }: { user: any, categories: any[] }) {
-    const [previewData, setPreviewData] = useState<{url: string, name: string} | null>(null);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function UserSubmissions({ user, categories }: { user: any; categories: any[] }) {
+    const [previewData, setPreviewData] = useState<{ url: string; name: string } | null>(null);
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/admin/dashboard' },
@@ -18,68 +19,86 @@ export default function UserSubmissions({ user, categories }: { user: any, categ
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Submissions - ${user.name}`} />
-            <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+            <div className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8">
                 <div className="mb-2">
-                    <Link href="/admin/users" className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center mb-4">
-                        <ArrowLeft className="w-4 h-4 mr-1" /> Kembali ke Manajemen Pengguna
+                    <Link href="/admin/users" className="mb-4 flex items-center text-sm font-medium text-blue-600 hover:text-blue-500">
+                        <ArrowLeft className="mr-1 h-4 w-4" /> Kembali ke Manajemen Pengguna
                     </Link>
-                    <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-500 dark:from-neutral-100 dark:to-neutral-400 bg-clip-text text-transparent">
+                    <h1 className="bg-gradient-to-r from-neutral-900 to-neutral-500 bg-clip-text text-3xl font-bold tracking-tight text-transparent dark:from-neutral-100 dark:to-neutral-400">
                         Status Kategori: {user.name}
                     </h1>
-                    <p className="text-muted-foreground mt-1 text-sm">
-                        Melihat dokumen yang telah diunggah oleh {user.name}.
-                    </p>
+                    <p className="text-muted-foreground mt-1 text-sm">Melihat dokumen yang telah diunggah oleh {user.name}.</p>
                 </div>
 
                 <div className="space-y-6">
                     {categories.map((category) => (
-                        <div key={category.id} className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
-                            <div className="bg-muted/50 p-4 border-b">
+                        <div key={category.id} className="bg-card text-card-foreground overflow-hidden rounded-xl border shadow-sm">
+                            <div className="bg-muted/50 border-b p-4">
                                 <h3 className="text-lg font-semibold">{category.name}</h3>
-                                <p className="text-sm text-muted-foreground">{category.description}</p>
+                                <p className="text-muted-foreground text-sm">{category.description}</p>
                             </div>
                             <div className="divide-y">
-                                {category.subcategories.map((sub: any) => {
+                                {category.subcategories.map(
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    (sub: any) => {
                                     const submission = sub.submissions?.[0];
                                     const isFilled = !!submission;
 
                                     return (
-                                        <div key={sub.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                                            <div className="flex items-start sm:items-center gap-4">
-                                                <div className="mt-1 sm:mt-0 flex-shrink-0">
+                                        <div key={sub.id} className="flex flex-col justify-between gap-4 p-4 sm:flex-row sm:items-center">
+                                            <div className="flex items-start gap-4 sm:items-center">
+                                                <div className="mt-1 flex-shrink-0 sm:mt-0">
                                                     {isFilled ? (
-                                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                                        <CheckCircle className="h-5 w-5 text-green-500" />
                                                     ) : (
-                                                        <Circle className="w-5 h-5 text-neutral-300 dark:text-neutral-600" />
+                                                        <Circle className="h-5 w-5 text-neutral-300 dark:text-neutral-600" />
                                                     )}
                                                 </div>
                                                 <div>
                                                     <h4 className="font-medium text-neutral-900 dark:text-neutral-100">{sub.name}</h4>
                                                     <p className="text-sm text-neutral-500 dark:text-neutral-400">{sub.description}</p>
                                                     {isFilled && submission.user_file && (
-                                                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1 flex items-center">
-                                                            <FileText className="w-3 h-3 mr-1" />
+                                                        <p className="mt-1 flex items-center text-xs text-blue-600 dark:text-blue-400">
+                                                            <FileText className="mr-1 h-3 w-3" />
                                                             {submission.user_file.original_name}
                                                         </p>
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="sm:ml-4 sm:flex-shrink-0 flex items-center justify-end">
+                                            <div className="flex items-center justify-end sm:ml-4 sm:flex-shrink-0">
                                                 {isFilled ? (
                                                     <div className="flex items-center">
-                                                        <Button variant="outline" size="sm" onClick={() => setPreviewData({url: `/admin/files/preview/${submission.user_file?.id}`, name: submission.user_file?.original_name || 'Preview'})} className="mr-2 flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                                                            <FileText className="w-4 h-4" />
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                setPreviewData({
+                                                                    url: `/admin/files/preview/${submission.user_file?.id}`,
+                                                                    name: submission.user_file?.original_name || 'Preview',
+                                                                })
+                                                            }
+                                                            className="mr-2 flex items-center gap-2 text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-900/20"
+                                                        >
+                                                            <FileText className="h-4 w-4" />
                                                             Preview
                                                         </Button>
-                                                        <a href={`/admin/files/download/${submission.user_file?.id}`} target="_blank" rel="noopener noreferrer">
-                                                            <Button variant="outline" size="sm" className="flex items-center gap-2 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20">
-                                                                <Download className="w-4 h-4" />
+                                                        <a
+                                                            href={`/admin/files/download/${submission.user_file?.id}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex items-center gap-2 border-green-200 text-green-700 hover:bg-green-50 dark:border-green-800 dark:text-green-400 dark:hover:bg-green-900/20"
+                                                            >
+                                                                <Download className="h-4 w-4" />
                                                                 Download
                                                             </Button>
                                                         </a>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-sm font-medium text-amber-600 bg-amber-50 dark:bg-amber-900/20 px-3 py-1 rounded-full whitespace-nowrap">
+                                                    <span className="rounded-full bg-amber-50 px-3 py-1 text-sm font-medium whitespace-nowrap text-amber-600 dark:bg-amber-900/20">
                                                         Belum Diisi
                                                     </span>
                                                 )}
@@ -88,32 +107,37 @@ export default function UserSubmissions({ user, categories }: { user: any, categ
                                     );
                                 })}
                                 {category.subcategories.length === 0 && (
-                                    <div className="p-4 text-sm text-muted-foreground text-center">
-                                        Tidak ada subkategori.
-                                    </div>
+                                    <div className="text-muted-foreground p-4 text-center text-sm">Tidak ada subkategori.</div>
                                 )}
                             </div>
                         </div>
                     ))}
                     {categories.length === 0 && (
-                        <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 shadow-sm">
+                        <div className="rounded-xl border border-neutral-200 bg-white py-12 text-center shadow-sm dark:bg-neutral-800">
                             <p className="text-muted-foreground">Sistem belum memiliki kategori.</p>
                         </div>
                     )}
                 </div>
             </div>
-            
+
             {previewData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
-                    <div className="flex flex-col w-full max-w-5xl h-[80vh] md:h-[90vh] bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-                        <div className="p-3 md:p-4 border-b border-neutral-200 dark:border-neutral-700 flex justify-between items-center bg-neutral-50 dark:bg-neutral-900">
-                            <h3 className="font-medium text-neutral-900 dark:text-neutral-100 text-sm md:text-base truncate mr-3">{previewData.name}</h3>
-                            <Button variant="outline" size="sm" onClick={() => setPreviewData(null)} className="flex-shrink-0 h-8 text-xs md:text-sm md:h-9">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm sm:p-6">
+                    <div className="animate-in fade-in zoom-in-95 flex h-[80vh] w-full max-w-5xl flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-2xl duration-200 md:h-[90vh] dark:border-neutral-700 dark:bg-neutral-800">
+                        <div className="flex items-center justify-between border-b border-neutral-200 bg-neutral-50 p-3 md:p-4 dark:border-neutral-700 dark:bg-neutral-900">
+                            <h3 className="mr-3 truncate text-sm font-medium text-neutral-900 md:text-base dark:text-neutral-100">
+                                {previewData.name}
+                            </h3>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setPreviewData(null)}
+                                className="h-8 flex-shrink-0 text-xs md:h-9 md:text-sm"
+                            >
                                 Tutup
                             </Button>
                         </div>
-                        <div className="flex-1 p-0 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                            <iframe src={previewData.url} className="w-full h-full border-0" title={previewData.name} />
+                        <div className="flex-1 overflow-hidden bg-neutral-100 p-0 dark:bg-neutral-900">
+                            <iframe src={previewData.url} className="h-full w-full border-0" title={previewData.name} />
                         </div>
                     </div>
                 </div>
