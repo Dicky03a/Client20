@@ -3,7 +3,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { CheckCircle, Circle, FileText, Download, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 import { useState } from 'react';
 
 export default function UserSubmissions({ user, categories }: { user: any, categories: any[] }) {
@@ -103,18 +103,21 @@ export default function UserSubmissions({ user, categories }: { user: any, categ
                 </div>
             </div>
             
-            <Dialog open={!!previewData} onOpenChange={(open) => !open && setPreviewData(null)}>
-                <DialogContent className="sm:max-w-[800px] w-[90vw] h-[90vh] flex flex-col p-0">
-                    <DialogHeader className="p-4 border-b">
-                        <DialogTitle>{previewData?.name}</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex-1 p-0 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
-                        {previewData && (
+            {previewData && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
+                    <div className="flex flex-col w-full max-w-5xl h-[80vh] md:h-[90vh] bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-3 md:p-4 border-b border-neutral-200 dark:border-neutral-700 flex justify-between items-center bg-neutral-50 dark:bg-neutral-900">
+                            <h3 className="font-medium text-neutral-900 dark:text-neutral-100 text-sm md:text-base truncate mr-3">{previewData.name}</h3>
+                            <Button variant="outline" size="sm" onClick={() => setPreviewData(null)} className="flex-shrink-0 h-8 text-xs md:text-sm md:h-9">
+                                Tutup
+                            </Button>
+                        </div>
+                        <div className="flex-1 p-0 overflow-hidden bg-neutral-100 dark:bg-neutral-900">
                             <iframe src={previewData.url} className="w-full h-full border-0" title={previewData.name} />
-                        )}
+                        </div>
                     </div>
-                </DialogContent>
-            </Dialog>
+                </div>
+            )}
         </AppLayout>
     );
 }
