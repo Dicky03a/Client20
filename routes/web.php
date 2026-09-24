@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    $categories = \App\Models\Category::with(['subcategories.submissions.userFile'])->get();
+    return Inertia::render('welcome', [
+        'categories' => $categories,
+    ]);
 })->name('home');
 
 // Removed dashboard route
